@@ -6,17 +6,17 @@ function toggleLight () {
     }
 }
 input.onButtonPressed(Button.A, function () {
-    velocity = Math.min(velocity + 10, 90)
+    velocity = Math.min(velocity + 30, 90)
     radio.sendNumber(velocity)
 })
 input.onButtonPressed(Button.B, function () {
-    velocity = Math.max(velocity - 10, -90)
+    velocity = Math.max(velocity - 30, -90)
     radio.sendNumber(velocity)
 })
 input.onGesture(Gesture.Shake, function () {
     radio.sendString("halt")
 })
-input.onLogoEvent(TouchButtonEvent.Pressed, function () {
+input.onLogoEvent(TouchButtonEvent.Touched, function () {
     toggleLight()
     radio.sendValue("light", light2)
 })
