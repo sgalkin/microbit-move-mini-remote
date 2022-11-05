@@ -10,9 +10,9 @@ input.onLogoEvent(TouchButtonEvent.LongPressed, function () {
     radio.sendValue("light", light2)
 })
 input.onButtonPressed(Button.A, function () {
-    velocity = Math.min(velocity + 15, 90)
-    radio.sendNumber(velocity)
+    velocity = Math.min(velocity + 45, 90)
     basic.showNumber(velocity)
+    radio.sendValue("velocity", velocity)
 })
 control.onEvent(EventBusSource.MICROBIT_ID_ACCELEROMETER, EventBusValue.MICROBIT_ACCELEROMETER_EVT_DATA_UPDATE, function () {
     if (isDriving == 1) {
@@ -39,9 +39,9 @@ input.onButtonPressed(Button.AB, function () {
     }
 })
 input.onButtonPressed(Button.B, function () {
-    velocity = Math.max(velocity - 15, -90)
-    radio.sendNumber(velocity)
+    velocity = Math.max(velocity - 45, -90)
     basic.showNumber(velocity)
+    radio.sendValue("velocity", velocity)
 })
 input.onGesture(Gesture.Shake, function () {
     radio.sendString("halt")
