@@ -7,7 +7,7 @@ input.onLogoEvent(TouchButtonEvent.LongPressed, function () {
 })
 input.onButtonPressed(Button.A, function () {
     shiftGear(1)
-    sendCommand(velocity_command, gears[current_gear_index])
+    sendCommand(velocity_command, Math.map(gears[current_gear_index], -100, 100, 0, 200))
 })
 control.onEvent(EventBusSource.MICROBIT_ID_ACCELEROMETER, EventBusValue.MICROBIT_ACCELEROMETER_EVT_DATA_UPDATE, function () {
     if (is_turning == 1) {
@@ -21,7 +21,6 @@ control.onEvent(EventBusSource.MICROBIT_ID_ACCELEROMETER, EventBusValue.MICROBIT
         } else {
             basic.showIcon(IconNames.SmallDiamond)
         }
-        radio.sendValue("roll", roll)
     }
 })
 function sendCommand (base: number, value: number) {
@@ -42,7 +41,7 @@ function shiftGear (direction: number) {
 }
 input.onButtonPressed(Button.B, function () {
     shiftGear(-1)
-    sendCommand(velocity_command, gears[current_gear_index])
+    sendCommand(velocity_command, Math.map(gears[current_gear_index], -100, 100, 0, 200))
 })
 input.onGesture(Gesture.Shake, function () {
     reset()
