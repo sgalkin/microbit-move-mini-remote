@@ -1,21 +1,16 @@
 function toggleLight () {
-    if (light2 == 0) {
-        light2 = 1
-    } else {
-        light2 = 0
-    }
+    light2 = (light2 + 1) % 2
 }
 input.onLogoEvent(TouchButtonEvent.LongPressed, function () {
     toggleLight()
-    radio.sendValue("light", light2)
+    sendCommand(light_command, light2)
 })
 input.onButtonPressed(Button.A, function () {
-    velocity = Math.min(velocity + 45, 90)
-    basic.showNumber(velocity)
-    radio.sendValue("velocity", velocity)
+    shiftGear(1)
+    sendCommand(velocity_command, gears[current_gear_index])
 })
 control.onEvent(EventBusSource.MICROBIT_ID_ACCELEROMETER, EventBusValue.MICROBIT_ACCELEROMETER_EVT_DATA_UPDATE, function () {
-    if (isDriving == 1) {
+    if (is_turning == 1) {
         if (Math.abs(roll - input.rotation(Rotation.Roll)) >= 5) {
             roll = input.rotation(Rotation.Roll)
         }
@@ -29,33 +24,54 @@ control.onEvent(EventBusSource.MICROBIT_ID_ACCELEROMETER, EventBusValue.MICROBIT
         radio.sendValue("roll", roll)
     }
 })
+function sendCommand (base: number, value: number) {
+    radio.sendNumber(base + value)
+}
 input.onButtonPressed(Button.AB, function () {
-    if (isDriving == 0) {
-        isDriving = 1
-        basic.showIcon(IconNames.Tortoise)
+    if (is_turning == 0) {
+        is_turning = 1
+        basic.showString("T")
     } else {
-        isDriving = 0
-        basic.showIcon(IconNames.Happy)
+        is_turning = 0
+        basic.showString("D")
     }
 })
+function shiftGear (direction: number) {
+    current_gear_index = Math.constrain(current_gear_index + direction, 0, gears.length - 1)
+    basic.showNumber(gears[current_gear_index])
+}
 input.onButtonPressed(Button.B, function () {
-    velocity = Math.max(velocity - 45, -90)
-    basic.showNumber(velocity)
-    radio.sendValue("velocity", velocity)
+    shiftGear(-1)
+    sendCommand(velocity_command, gears[current_gear_index])
 })
 input.onGesture(Gesture.Shake, function () {
-    radio.sendString("halt")
     reset()
+    sendCommand(control_command, 1)
 })
 function reset () {
-    velocity = 0
+    current_gear_index = gears.length / 2
     light2 = 0
     roll = 0
-    isDriving = 0
+    is_turning = 0
 }
 let roll = 0
-let isDriving = 0
-let velocity = 0
+let is_turning = 0
+let current_gear_index = 0
 let light2 = 0
+let gears: number[] = []
+let light_command = 0
+let velocity_command = 0
+let control_command = 0
 radio.setGroup(42)
 reset()
+control_command = 0
+velocity_command = 256
+let turn_command = 512
+light_command = 768
+gears = [
+-100,
+-50,
+0,
+50,
+100
+]
