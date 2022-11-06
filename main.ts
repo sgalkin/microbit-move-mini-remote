@@ -49,7 +49,7 @@ input.onGesture(Gesture.Shake, function () {
     sendCommand(control_command, 1)
 })
 function reset () {
-    current_gear_index = gears.length / 2
+    current_gear_index = Math.trunc(gears.length / 2)
     light2 = 0
     roll = 0
     is_turning = 0
@@ -63,7 +63,6 @@ let light_command = 0
 let velocity_command = 0
 let control_command = 0
 radio.setGroup(42)
-reset()
 control_command = 0
 velocity_command = 256
 let turn_command = 512
@@ -75,3 +74,4 @@ gears = [
 50,
 100
 ]
+reset()
